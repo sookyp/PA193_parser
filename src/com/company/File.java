@@ -33,8 +33,17 @@ public class File {
         }
     }
 
+    public String fileContents(){
+        try {
+            return new String(Files.readAllBytes(this.path));
+        } catch (Throwable t) {
+            return "";
+        }
+    }
+
     public void printFileInfo(){
         System.out.println(this.fileSize());
         System.out.println(this.fileName());
+        // System.out.println(this.fileContents());
     }
 }
