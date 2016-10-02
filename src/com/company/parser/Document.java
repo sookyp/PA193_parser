@@ -1,6 +1,9 @@
 package com.company.parser;
 import com.company.File;
+import com.company.parser.parsers.CatalogParser;
 import com.company.parser.parsers.MetadataParser;
+import com.company.parser.supporting.files.DocumentCatalog;
+import com.company.parser.supporting.files.DocumentMetadata;
 
 import java.nio.file.*;
 
@@ -10,6 +13,7 @@ import java.nio.file.*;
 public class Document extends File {
 
     DocumentMetadata metadata;
+    DocumentCatalog catalog;
 
     public Document(Path path) {
         super(path);
@@ -18,15 +22,13 @@ public class Document extends File {
 
     private void parseDocument(){
         this.parseMetadata();
-        this.parseForms();
+        this.parseCatalog();
     }
 
-    private void parseForms(){
-        // do stuff
-    }
+    private void parseCatalog(){ this.catalog = new CatalogParser(this.getPath()).parseCatalog(); }
 
     private void parseMetadata(){
-        this.metadata = new MetadataParser().parseMetadata(this.getPath());
+        this.metadata = new MetadataParser(this.getPath()).parseMetadata();
     }
 
     public DocumentMetadata metadata(){
