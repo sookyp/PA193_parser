@@ -20,6 +20,10 @@ public class Document extends File {
         this.parseDocument();
     }
 
+    public DocumentMetadata getMetadata(){
+        return this.metadata;
+    }
+
     private void parseDocument(){
         this.parseMetadata();
         this.parseCatalog();
@@ -30,9 +34,4 @@ public class Document extends File {
     private void parseMetadata(){
         this.metadata = new MetadataParser(this.getPath()).parseMetadata();
     }
-
-    public DocumentMetadata metadata(){
-        return this.metadata;
-    }
-
 }
