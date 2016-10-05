@@ -8,11 +8,16 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by val on 02/10/16.
  */
 public class MetadataParser extends Parser {
+    
+    private static final String METADATA_BEGIN = "<?xpacket begin";
+    private static final String METADATA_END = "<?xpacket end";
 
     public MetadataParser(Path path){
         super(path);
@@ -23,24 +28,34 @@ public class MetadataParser extends Parser {
     }
    
     
-    public void read(InputStream is) throws IOException {
+    public List<String> read(InputStream is) throws IOException {
+        Boolean record = Boolean.FALSE;
+        List<String> metadata = new ArrayList<>();
+        
         BufferedReader br = new BufferedReader(new InputStreamReader((is)));
 
         try {
             String line = br.readLine();
 
-            while (line != null) {
-                // I'll commit later
-                line = br.readLine();
+           while (line != null) {
+               if(line.contains(METADATA_BEGIN) || record.equals(Boolean.TRUE)){
+                   record = Boolean.TRUE;
+                   metadata.add(line);
+               }
+               if(line.contains(METADATA_END)){
+                   record = Boolean.FALSE;
+               }
+               line = br.readLine();
             }
         } catch (Exception e) {
             throw new IOException(e);
         }
+        return metadata;
     }    
     
-    public void read(File file) throws IOException {
+    public List<String> read(File file) throws IOException {
         try (FileInputStream fis = new FileInputStream(file)) {
-            this.read(fis);
+            return this.read(fis);
         }
     }
 
