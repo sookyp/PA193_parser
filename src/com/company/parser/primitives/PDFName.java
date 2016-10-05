@@ -7,8 +7,14 @@ import java.io.InputStream;
  * Created by val on 02/10/16.
  */
 public class PDFName implements PDFObject {
+    String name;
+
     @Override
     public PDFObject objectWithData(InputStream bytes) {
         return null;
+    }
+
+    public String toString() {
+        return name;
     }
 }
