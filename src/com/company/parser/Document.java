@@ -1,6 +1,6 @@
 package com.company.parser;
 import com.company.File;
-import com.company.parser.parsers.CatalogParser;
+import com.company.parser.parsers.PagesParser;
 import com.company.parser.parsers.MetadataParser;
 import com.company.parser.supporting.files.DocumentCatalog;
 import com.company.parser.supporting.files.DocumentMetadata;
@@ -29,7 +29,7 @@ public class Document extends File {
         this.parseCatalog();
     }
 
-    private void parseCatalog(){ this.catalog = new CatalogParser(this.getPath()).parseCatalog(); }
+    private void parseCatalog(){ this.catalog = new PagesParser(this.getPath()).parsePages(); }
 
     private void parseMetadata(){
         this.metadata = new MetadataParser(this.getPath()).parseMetadata();

@@ -23,40 +23,13 @@ public class MetadataParser extends Parser {
         super(path);
     }
 
-    public DocumentMetadata parseMetadata(){
-        return new DocumentMetadata();
-    }
-   
-    
-    public List<String> read(InputStream is) throws IOException {
-        Boolean record = Boolean.FALSE;
-        List<String> metadata = new ArrayList<>();
-        
-        BufferedReader br = new BufferedReader(new InputStreamReader((is)));
-
-        try {
-            String line = br.readLine();
-
-           while (line != null) {
-               if(line.contains(METADATA_BEGIN) || record.equals(Boolean.TRUE)){
-                   record = Boolean.TRUE;
-                   metadata.add(line);
-               }
-               if(line.contains(METADATA_END)){
-                   record = Boolean.FALSE;
-               }
-               line = br.readLine();
-            }
-        } catch (Exception e) {
-            throw new IOException(e);
-        }
-        return metadata;
-    }    
-    
-    public List<String> read(File file) throws IOException {
-        try (FileInputStream fis = new FileInputStream(file)) {
-            return this.read(fis);
+    public DocumentMetadata parseMetadata() {
+        try{
+            List<String> metadata = new FileReader().read(this.getPath(), METADATA_BEGIN, METADATA_END);
+            // Do stuff
+            return new DocumentMetadata();
+        } catch(Exception e){
+            return null;
         }
     }
-
 }
