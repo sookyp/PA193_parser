@@ -11,10 +11,7 @@ public class PDFDictionary implements PDFObject {
 
     Map<String, PDFObject> map = new HashMap<String, PDFObject>();
 
-    String[] keys;
-    PDFObject[] values;
-
-
+    @Override
     public PDFObject objectWithData(InputStream bytes) {
         return null;
     }
