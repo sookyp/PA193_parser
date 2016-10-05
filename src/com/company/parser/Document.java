@@ -25,11 +25,22 @@ public class Document extends File {
     }
 
     private void parseDocument(){
-        this.parseMetadata();
-        this.parseCatalog();
+        try {
+            this.parseMetadata();
+        } catch(Exception e){
+            System.out.println("An error occured while parsing metadata");
+        }
+
+        try {
+            this.parseCatalog();
+        } catch(Exception e){
+            System.out.println("An error occured while parsing pages of the pdf");
+        }
     }
 
-    private void parseCatalog(){ this.catalog = new PagesParser(this.getPath()).parsePages(); }
+    private void parseCatalog() throws Exception{
+        this.catalog = new PagesParser(this.getPath()).parsePages();
+    }
 
     private void parseMetadata(){
         this.metadata = new MetadataParser(this.getPath()).parseMetadata();

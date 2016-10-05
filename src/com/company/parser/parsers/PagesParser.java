@@ -5,6 +5,7 @@ import com.company.parser.supporting.files.DocumentCatalog;
 import com.company.parser.supporting.files.DocumentMetadata;
 
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Created by val on 02/10/16.
@@ -15,10 +16,10 @@ public class PagesParser extends Parser{
         super(path);
     }
 
-    public DocumentCatalog parsePages(){
+    public DocumentCatalog parsePages() throws Exception{
+        List<String> trailer = new TrailerParser(getPath()).parseTrailer();
+
         PDFPage[] pages = {};
         return new DocumentCatalog( pages );
     }
-
-
 }

@@ -25,11 +25,14 @@ public class MetadataParser extends Parser {
 
     public DocumentMetadata parseMetadata() {
         try{
-            List<String> metadata = new FileReader().read(this.getPath(), METADATA_BEGIN, METADATA_END);
-            // Do stuff
+            List<String> metadata = this.parseMetadataFromFile();
             return new DocumentMetadata();
         } catch(Exception e){
             return null;
         }
+    }
+
+    private List<String> parseMetadataFromFile() throws IOException{
+        return new FileReader().read(this.getPath(), METADATA_BEGIN, METADATA_END);
     }
 }
