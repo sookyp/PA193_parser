@@ -1,5 +1,6 @@
 package com.company.parser.parsers;
 
+import com.company.parser.primitives.PDFDictionary;
 import com.company.parser.primitives.PDFPage;
 import com.company.parser.supporting.files.DocumentCatalog;
 import com.company.parser.supporting.files.DocumentMetadata;
@@ -17,8 +18,7 @@ public class PagesParser extends Parser{
     }
 
     public DocumentCatalog parsePages() throws Exception{
-        List<String> trailer = new TrailerParser(getPath()).parseTrailer();
-
+        PDFDictionary trailer = new TrailerParser(getPath()).parseTrailer();
         PDFPage[] pages = {};
         return new DocumentCatalog( pages );
     }

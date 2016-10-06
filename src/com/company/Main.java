@@ -2,6 +2,7 @@ package com.company;
 
 import com.company.parser.Document;
 import com.company.parser.*;
+import com.company.parser.parsers.IndirectObjectParser;
 
 public class Main {
 
@@ -10,5 +11,6 @@ public class Main {
         Document documentToParse = new Document( loader.pathForTestPdf() );
 
         documentToParse.printFileInfo();
+
     }
 }

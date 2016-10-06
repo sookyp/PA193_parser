@@ -6,6 +6,6 @@ import java.io.InputStream;
 /**
  * Created by val on 02/10/16.
  */
-interface PDFObject {
+public interface PDFObject {
     public PDFObject objectWithData(InputStream bytes);
 }

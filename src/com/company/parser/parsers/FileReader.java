@@ -3,6 +3,7 @@ package com.company.parser.parsers;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
 public class FileReader {
     public List<String> read(Path path, String startDelimiter, String endDelimiter) throws IOException {
         Boolean record = Boolean.FALSE;
-        List<String> metadata = new ArrayList<>();
+        String parsedString = new String();
 
         BufferedReader br = this.readerForPath(path);
         try {
@@ -20,7 +21,7 @@ public class FileReader {
             while (line != null) {
                 if(line.contains(startDelimiter) || record.equals(Boolean.TRUE)){
                     record = Boolean.TRUE;
-                    metadata.add(line);
+                    parsedString = parsedString.concat(line);
                 }
                 if(line.contains(endDelimiter)){
                     record = Boolean.FALSE;
@@ -30,6 +31,9 @@ public class FileReader {
         } catch (Exception e) {
             throw new IOException(e);
         }
+        parsedString = parsedString.replace(endDelimiter, "");
+        List<String> metadata = Arrays.asList(parsedString.split(startDelimiter));
+
         return metadata;
     }
 
