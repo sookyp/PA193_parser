@@ -19,6 +19,16 @@ public class PagesParser extends Parser{
 
     public DocumentCatalog parsePages() throws Exception{
         PDFDictionary trailer = new TrailerParser(getPath()).parseTrailer();
+
+        // PDFDictionary root = trailer.objectForKey("/Root");
+        // PDFDictionary pages = pageTree.objectForKey("/Type/Catalog/Pages");
+        // PDFArray kids = pages.objectForKey("/Kids");
+        // foreach(kid in kids) {
+        //   if kid.objectForKey("type") == Page => it's a page, store it
+        //   else => recursively traverse till the leaf is found, it is an intermediate node
+        // }
+        //
+
         PDFPage[] pages = {};
         return new DocumentCatalog( pages );
     }
