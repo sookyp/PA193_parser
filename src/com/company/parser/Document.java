@@ -37,14 +37,11 @@ public class Document extends File {
         } catch(Exception e){
             System.out.println("An error occured while parsing pages of the pdf");
         }
-
-        this.tryToParseIndirectObject("32 0 R");
     }
 
     private void tryToParseIndirectObject(String objId){
         System.out.print((new IndirectObjectParser(this.getPath())).parseIndirectObject(objId));
     }
-
 
     private void parseCatalog() throws Exception{
         this.catalog = new PagesParser(this.getPath()).parsePages();
