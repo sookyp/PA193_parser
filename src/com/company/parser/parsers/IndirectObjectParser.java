@@ -27,12 +27,15 @@ public class IndirectObjectParser extends Parser {
         try {
             String content = new FileReader().read(this.getPath());
 
-            String regex = "^\\s*" + objectId.replace("R", "obj") + "\\s*(.*?)\\s*endobj";
+            String prefix = objectId.replace("R", "obj");
+            String suffix = "endobj";
+
+            String regex = "^\\s*" + prefix + "\\s*(.*?)\\s*" + suffix;
             Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE | Pattern.DOTALL);
             Matcher matcher = pattern.matcher(content);
 
             while (matcher.find()) {
-                return matcher.group();
+                return matcher.group(1);
             }
             return null;
         } catch (Exception e) {

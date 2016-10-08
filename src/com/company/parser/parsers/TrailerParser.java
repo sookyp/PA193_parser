@@ -30,21 +30,15 @@ public class TrailerParser extends Parser {
         super(path);
     }
 
-    public PDFDictionary parseTrailer() throws IOException{
+    public String parseTrailer() throws IOException{
         String trailers = new FileReader().read(getPath(), TRAILER_BEGIN, TRAILER_END);
         PDFDictionary[] trailerObjects = new PDFDictionary[0];
         
         List<String> trailersList = Arrays.asList(trailers.split(TRAILER_BEGIN));
         int count = trailersList.toArray().length;
-        for(int i = count - 1; i >= 0; i--){
-            String trailer = trailersList.get(i);
-            PDFDictionary dictionary = new PDFDictionary();
-            try {
-                dictionary.parseDictionary(trailer, 0);
-                return dictionary;
-            } catch (PDFObject.InvalidException e) {
-                return null;
-            }
+        if(count > 0) {
+            String trailer = trailersList.get(count - 1);
+            return trailer;
         }
 
         return null;

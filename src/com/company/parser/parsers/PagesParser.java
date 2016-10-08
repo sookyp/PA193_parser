@@ -1,12 +1,13 @@
 package com.company.parser.parsers;
 
 import com.company.parser.primitives.PDFDictionary;
-import com.company.parser.primitives.PDFName;
+import com.company.parser.primitives.PDFObject;
 import com.company.parser.primitives.PDFPage;
-import com.company.parser.supporting.files.DocumentCatalog;
-import com.company.parser.supporting.files.DocumentMetadata;
+import com.company.parser.primitives.PDFStream;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,20 +19,47 @@ public class PagesParser extends Parser{
         super(path);
     }
 
-    public DocumentCatalog parsePages() throws Exception{
-        PDFDictionary trailer = new TrailerParser(getPath()).parseTrailer();
-        System.out.print(trailer.retrieveValues());
+    public List<PDFPage> parsePages() throws Exception{
+        List<PDFPage> pages = new ArrayList<PDFPage>();
 
-        // PDFDictionary root = trailer.objectForKey("/Root");
-        // PDFDictionary pages = pageTree.objectForKey("/Type/Catalog/Pages");
-        // PDFArray kids = pages.objectForKey("/Kids");
-        // foreach(kid in kids) {
-        //   if kid.objectForKey("type") == Page => it's a page, store it
-        //   else => recursively traverse till the leaf is found, it is an intermediate node
-        // }
-        //
+        String trailer = new TrailerParser(getPath()).parseTrailer();
+        String rootObj = parseRoot(trailer);
+        String pagesRef = PDFDictionary.parseIndirectObjectFromDictionary(rootObj, "/Pages");
 
-        PDFPage[] pages = {};
-        return new DocumentCatalog( pages );
+        List<String> kids = parsePageTreeKids(pagesRef);
+        traverseLeaves(pages, kids);
+
+        System.out.print("pages parsed = " + pages.size() + "\n");
+        return pages;
+
+    }
+
+    private void traverseLeaves(List<PDFPage> pages, List<String> kids) {
+        for (int i = 0; i < kids.size(); i++) {
+            try {
+                parsePage(pages, kids.get(i));
+            } catch (Exception e) {
+                List<String> nodes = parsePageTreeKids(kids.get(i));
+                this.traverseLeaves(pages, nodes);
+            }
+        }
+    }
+
+    private void parsePage(List<PDFPage> pages, String kid) throws IOException, PDFObject.InvalidException {
+        String nodeObj = new IndirectObjectParser(getPath()).parseIndirectObject(kid);
+        String contentsRef = PDFDictionary.parseIndirectObjectFromDictionary(nodeObj, "/Contents");
+        String contentsObj = new IndirectObjectParser(getPath()).parseIndirectObject(contentsRef);
+        PDFStream stream = PDFStream.parseStream(contentsObj);
+        pages.add(new PDFPage(0, stream));
+    }
+
+    private List<String> parsePageTreeKids(String rootObj) {
+        String pageObj = new IndirectObjectParser(getPath()).parseIndirectObject(rootObj);
+        return PDFDictionary.parseIndirectObjectArrayDictionary(pageObj, "/Kids");
+    }
+
+    private String parseRoot(String trailer) {
+        String rootRef = PDFDictionary.parseIndirectObjectFromDictionary(trailer, "/Root");
+        return new IndirectObjectParser(getPath()).parseIndirectObject(rootRef);
     }
 }

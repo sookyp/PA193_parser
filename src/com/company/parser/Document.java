@@ -1,12 +1,12 @@
 package com.company.parser;
 import com.company.File;
-import com.company.parser.parsers.IndirectObjectParser;
 import com.company.parser.parsers.PagesParser;
 import com.company.parser.parsers.MetadataParser;
-import com.company.parser.supporting.files.DocumentCatalog;
+import com.company.parser.primitives.PDFPage;
 import com.company.parser.supporting.files.DocumentMetadata;
 
 import java.nio.file.*;
+import java.util.List;
 
 /**
  * Created by val on 01/10/16.
@@ -14,7 +14,7 @@ import java.nio.file.*;
 public class Document extends File {
 
     DocumentMetadata metadata;
-    DocumentCatalog catalog;
+    List<PDFPage> pages;
 
     public Document(Path path) {
         super(path);
@@ -33,18 +33,14 @@ public class Document extends File {
         }
 
         try {
-            this.parseCatalog();
+            this.parsePages();
         } catch(Exception e){
             System.out.println("An error occured while parsing pages of the pdf");
         }
     }
 
-    private void tryToParseIndirectObject(String objId){
-        System.out.print((new IndirectObjectParser(this.getPath())).parseIndirectObject(objId));
-    }
-
-    private void parseCatalog() throws Exception{
-        this.catalog = new PagesParser(this.getPath()).parsePages();
+    private void parsePages() throws Exception{
+        this.pages = new PagesParser(this.getPath()).parsePages();
     }
 
     private void parseMetadata(){

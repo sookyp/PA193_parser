@@ -3,6 +3,7 @@ package com.company.parser.primitives;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,6 +52,48 @@ public class PDFDictionary extends PDFObject {
 		this.streamData = data;
 	}
 
+    static public List<String> parseIndirectObjectArrayDictionary(CharSequence bytes, String key) {
+        if(bytes.length() < 4) {
+            return null;
+        }
+
+        CharSequence prefix = bytes.subSequence(0, 2);
+        CharSequence suffix = bytes.subSequence(bytes.length() - 2, bytes.length());
+        if(prefix.equals("<<") && suffix.equals(">>")) {
+            String regex = Pattern.quote(key) + "\\s*" + Pattern.quote("[") + "\\s*" + "(.*?)" + "\\s*" + Pattern.quote("]");
+
+            Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE | Pattern.DOTALL);
+            Matcher matcher = pattern.matcher(bytes);
+
+            while (matcher.find()) {
+                String arrayContents = matcher.group(1);
+
+                return PDFArray.parseIndirectObjectsFromArray("[" + arrayContents + "]");
+            }
+        }
+        return null;
+    }
+
+	static public String parseIndirectObjectFromDictionary(CharSequence bytes, String key) {
+		if(bytes.length() < 4) {
+			return null;
+		}
+
+		CharSequence prefix = bytes.subSequence(0, 2);
+		CharSequence suffix = bytes.subSequence(bytes.length() - 2, bytes.length());
+		if(prefix.equals("<<") && suffix.equals(">>")) {
+            String regex = Pattern.quote(key) + "\\s*" + "(.*?)" + "\\s*" + Pattern.quote("0 R");
+
+			Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE | Pattern.DOTALL);
+			Matcher matcher = pattern.matcher(bytes);
+
+			while (matcher.find()) {
+                return matcher.group(1) + " 0 R";
+			}
+		}
+		return null;
+    }
+
 	public Map<PDFName, PDFObject> parseDictionary(CharSequence bytes, int offset)
 			throws IOException, InvalidException {
 		if (offset < bytes.length()) {
@@ -91,8 +134,8 @@ public class PDFDictionary extends PDFObject {
 				while (true) {
 					cycle_counter += 1;
 					if (new_start_matcher.find()) {
-
 						current_level = new_start_matcher.group(0);
+
 						remaining_level = remaining_level.substring(current_level.length());
 
 						// add to pdf_array to current level
@@ -106,6 +149,7 @@ public class PDFDictionary extends PDFObject {
 								continue;
 							element = PDFObject.resolveType(element_list[i]);
 							// every odd is a key, type PDFName
+
 							if (i % 2 != 0) {
 								/*
 								 * Cannot happen if
@@ -135,6 +179,7 @@ public class PDFDictionary extends PDFObject {
 						level += 1;
 
 					}
+
 					if (end_matcher.find()) {
 						current_level = end_matcher.group(0);
 						remaining_level = remaining_level.substring(current_level.length());

@@ -28,6 +28,30 @@ public class PDFArray extends PDFObject {
 		this.array.add(element);
 	}
 
+	static public List<String> parseIndirectObjectsFromArray(CharSequence bytes) {
+		if(bytes.length() < 2) {
+			return null;
+		}
+
+		CharSequence prefix = bytes.subSequence(0, 1);
+		CharSequence suffix = bytes.subSequence(bytes.length() - 1, bytes.length());
+
+		if(prefix.equals("[") && suffix.equals("]")) {
+			String regex = "(\\d+\\s\\d\\sR)";
+
+			Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE | Pattern.DOTALL);
+			Matcher matcher = pattern.matcher(bytes);
+
+			List<String> returnList = new ArrayList<>();
+			while (matcher.find()) {
+				returnList.add(matcher.group());
+			}
+			return returnList;
+		}
+
+		return null;
+	}
+
 	public List<PDFObject> parseArray(CharSequence bytes, int offset) throws IOException, InvalidException {
 		if (offset < bytes.length()) {
 			bytes.subSequence(offset, bytes.length());
