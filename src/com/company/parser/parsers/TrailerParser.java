@@ -4,6 +4,7 @@ import com.company.parser.primitives.PDFDictionary;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,10 +30,11 @@ public class TrailerParser extends Parser {
     }
 
     public PDFDictionary parseTrailer() throws IOException{
-        List<String> trailers = new FileReader().read(getPath(), TRAILER_BEGIN, TRAILER_END);
+        String trailers = new FileReader().read(getPath(), TRAILER_BEGIN, TRAILER_END);
         PDFDictionary[] trailerObjects = new PDFDictionary[0];
-
-        int count = trailers.toArray().length;
+        
+        List<String> trailersList = Arrays.asList(trailers.split(TRAILER_BEGIN));
+        int count = trailersList.toArray().length;
         for(int i = count - 1; i >= 0; i--){
             //System.out.print("\n" + trailers.toArray()[i].getClass().getName() + " " + trailers.toArray()[i]);
             // try to parse each trailer; whatever parsed successfully, is the trailer

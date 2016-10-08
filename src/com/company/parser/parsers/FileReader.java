@@ -12,8 +12,9 @@ import java.nio.file.Files;
  * Created by val on 05/10/16.
  */
 public class FileReader {
-    public List<String> read(Path path, String startDelimiter, String endDelimiter) throws IOException {
+    public String read(Path path, String startDelimiter, String endDelimiter) throws IOException {
         Boolean record = Boolean.FALSE;
+        StringBuilder parsed = new StringBuilder();
         String parsedString = new String();
 
         BufferedReader br = this.readerForPath(path);
@@ -23,7 +24,7 @@ public class FileReader {
             while (line != null) {
                 if(line.contains(startDelimiter) || record.equals(Boolean.TRUE)){
                     record = Boolean.TRUE;
-                    parsedString = parsedString.concat(line);
+                    parsed.append(line);
                 }
                 if(line.contains(endDelimiter)){
                     record = Boolean.FALSE;
@@ -33,10 +34,9 @@ public class FileReader {
         } catch (Exception e) {
             throw new IOException(e);
         }
-        parsedString = parsedString.replace(endDelimiter, "");
-        List<String> metadata = Arrays.asList(parsedString.split(startDelimiter));
+        parsedString = parsed.toString().replace(endDelimiter, "");
 
-        return metadata;
+        return parsedString;
     }
 
     public String read(Path path){
