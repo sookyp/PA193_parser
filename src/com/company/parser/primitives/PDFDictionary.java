@@ -62,7 +62,6 @@ public class PDFDictionary extends PDFObject {
 			String current_level = null;
 			String remaining_level = null;
 			if (start_matcher.matches()) {
-
 				Map<PDFName, PDFObject> pdf_dictionary = new Hashtable<PDFName, PDFObject>();
 				level_0 = start_matcher.group("content");
 
@@ -136,7 +135,6 @@ public class PDFDictionary extends PDFObject {
 						level += 1;
 
 					}
-
 					if (end_matcher.find()) {
 						current_level = end_matcher.group(0);
 						remaining_level = remaining_level.substring(current_level.length());
@@ -146,13 +144,11 @@ public class PDFDictionary extends PDFObject {
 						if (element_list.length % 2 != 0)
 							// must be odd, otherwise the one key would
 							// be without a value +1 for brackets
-						throw new InvalidException("Invalid key");
-
+							throw new InvalidException("Invalid key");
 						for (int i = 0; i < element_list.length; i++) {
 							if (element_list[i].trim().isEmpty() || element_list[i].trim().startsWith(">>"))
 								continue;
 							element = PDFObject.resolveType(element_list[i]);
-
 							// every odd is a key, type PDFName
 							if (i % 2 != 0) {
 								/*
@@ -197,7 +193,6 @@ public class PDFDictionary extends PDFObject {
 
 						level -= 1;
 					}
-
 					if (level > 20) {
 						// 20 - magic number to limit nesting
 						throw new InvalidException("Too deep dictionary nesting");
