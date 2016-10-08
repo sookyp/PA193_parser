@@ -23,10 +23,6 @@ public class PDFNumber extends PDFObject {
 		}
 	}
 
-    public String toString() {
-        return valueOf(value);
-    }
-
 	@Override
 	public PDFNumber parse(CharSequence element, int offset) throws IOException, InvalidException {
 		if (offset < element.length()) {

@@ -6,8 +6,7 @@ import java.io.InputStream;
 /**
  * Created by val on 02/10/16.
  */
-public class PDFStream implements PDFObject {
-    @Override
+public class PDFStream extends PDFObject {
     public PDFObject objectWithData(InputStream bytes) {
         return null;
     }

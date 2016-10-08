@@ -17,10 +17,7 @@ public class PDFString extends PDFObject {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
-    public String toString() {
-        return string;
-    }
+
 
 	@Override
 	public PDFString parse(CharSequence bytes, int offset) throws IOException, InvalidException {

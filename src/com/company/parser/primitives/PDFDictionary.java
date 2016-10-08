@@ -11,22 +11,22 @@ import java.util.regex.Pattern;
  * Created by val on 02/10/16.
  */
 public class PDFDictionary extends PDFObject {
-	private Map<PDFName, PDFObject> hashtable = new Hashtable<PDFName, PDFObject>();
+	private Map<String, PDFObject> hashtable = new Hashtable<>();
 	private PDFName key = null;
 	private PDFObject value = null;
 	private Boolean isStream = false;
 	private String streamData = null;
     private static final int NOT_FOUND = Integer.MAX_VALUE;
 
-    public Map<PDFName, PDFObject> getHashtable() {
+    public Map<String, PDFObject> getHashtable() {
 		return hashtable;
 	}
 
-	public void setHashtable(Map<PDFName, PDFObject> hashtable) {
+	public void setHashtable(Map<String, PDFObject> hashtable) {
 		this.hashtable = hashtable;
 	}
 
-	public void insertPair(PDFName key, PDFObject value) {
+	public void insertPair(String key, PDFObject value) {
 		this.hashtable.put(key, value);
 	}
 
@@ -212,7 +212,7 @@ public class PDFDictionary extends PDFObject {
 
     public boolean setObjectForKey(PDFObject object, String key){
         try{
-            this.put(key, object);
+            this.hashtable.put(key, object);
         } catch (Exception e){
             return false;
         }
@@ -221,7 +221,7 @@ public class PDFDictionary extends PDFObject {
 
     public PDFObject objectForKey(String key){
         try{
-            return this.get(key);
+            return this.hashtable.get(key);
         } catch (Exception e){
             return null;
         }
