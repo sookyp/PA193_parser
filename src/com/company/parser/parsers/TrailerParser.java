@@ -1,6 +1,7 @@
 package com.company.parser.parsers;
 
 import com.company.parser.primitives.PDFDictionary;
+import com.company.parser.primitives.PDFObject;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -36,9 +37,14 @@ public class TrailerParser extends Parser {
         List<String> trailersList = Arrays.asList(trailers.split(TRAILER_BEGIN));
         int count = trailersList.toArray().length;
         for(int i = count - 1; i >= 0; i--){
-            // System.out.print("\n" + trailersList.toArray()[i].getClass().getName() + " " + trailersList.toArray()[i]);
-            // try to parse each trailer; whatever parsed successfully, is the trailer
-            // TODO: needs implemented dictionary parsing
+            String trailer = trailersList.get(i);
+            PDFDictionary dictionary = new PDFDictionary();
+            try {
+                dictionary.parseDictionary(trailer, 0);
+                return dictionary;
+            } catch (PDFObject.InvalidException e) {
+                return null;
+            }
         }
 
         return null;
