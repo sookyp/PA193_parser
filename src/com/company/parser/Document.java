@@ -53,9 +53,10 @@ public class Document extends File {
     public void serializeToFile(){
         String json = null;
 
-        try {
-            String metadataJson = this.getMetadata().getJSON();
+        String streamsJson = "";
+        String metadataJson = "";
 
+        try {
             List<String> streams = new ArrayList<String>();
             for (int index = 0; index < this.pages.size(); index++) {
                 if (this.pages.get(index).getStream() != null) {
@@ -63,7 +64,7 @@ public class Document extends File {
                 }
             }
 
-            String streamsJson = "[";
+            streamsJson = "[";
             int size = streams.size();
             for (int index = 0; index < size; index++) {
                 streamsJson += streams.get(index);
@@ -72,13 +73,23 @@ public class Document extends File {
                 }
             }
             streamsJson += "]";
+        } catch (Exception e) {
+            System.err.println("Error occurred while serializing");
+        }
 
-
-            this.writeFile("{\"metadata\":" + metadataJson + ",\"streams\":" + streamsJson + "}");
+        try {
+            metadataJson = this.getMetadata().getJSON();
         } catch (Exception e) {
             System.err.println(e);
             System.err.println("Error occurred while serializing");
         }
+
+        if(metadataJson.length() > 0) {
+            this.writeFile("{\"metadata\":" + metadataJson + ",\"streams\":" + streamsJson + "}");
+        } else {
+            this.writeFile("{\"streams\":" + streamsJson + "}");
+        }
+
     }
 
     private void writeFile(String contents){
