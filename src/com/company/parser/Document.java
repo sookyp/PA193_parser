@@ -29,15 +29,16 @@ public class Document extends File {
 
     private void parseDocument(){
         try {
-            this.parseMetadata();
-        } catch(Exception e){
-            System.out.println("An error occured while parsing metadata");
-        }
-
-        try {
             this.parsePages();
         } catch(Exception e){
             System.out.println("An error occured while parsing pages of the pdf");
+        }
+
+        try {
+            this.parseMetadata();
+            metadata.setNumberOfPages(this.pages.size());
+        } catch(Exception e){
+            System.out.println("An error occured while parsing metadata");
         }
     }
 
@@ -75,15 +76,18 @@ public class Document extends File {
 
             this.writeFile("{\"metadata\":" + metadataJson + ",\"streams\":" + streamsJson + "}");
         } catch (Exception e) {
+            System.err.println(e);
             System.err.println("Error occurred while serializing");
         }
     }
 
     private void writeFile(String contents){
         try {
-            PrintWriter file_writer = new PrintWriter("output.json", "UTF-8");
+            String fileName = "output.json";
+            PrintWriter file_writer = new PrintWriter(fileName, "UTF-8");
             file_writer.println(contents);
             file_writer.close();
+            System.err.println("Successfully written to " + fileName);
         } catch(Exception e){
             System.err.println("Error occurred while writing the output");
         }

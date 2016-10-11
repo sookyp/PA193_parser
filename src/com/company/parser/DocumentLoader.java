@@ -7,6 +7,6 @@ import java.nio.file.*;
  */
 public class DocumentLoader {
     public Path pathForTestPdf(){
-        return FileSystems.getDefault().getPath("Sample Documents", "Sample Form.pdf");
+        return FileSystems.getDefault().getPath("Sample Documents", "Standards_keylength_PKI_2014.pdf");
     }
 }

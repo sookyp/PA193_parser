@@ -18,12 +18,13 @@ public class DocumentMetadata {
 
     }
 
-    public DocumentMetadata(int numberOfPages) {
-
-    }
 
     public int getNumberOfPages(){
         return this.numberOfPages;
+    }
+
+    public void setNumberOfPages(int number) {
+        this.numberOfPages = number;
     }
 
     public Date getCreateDate() {
