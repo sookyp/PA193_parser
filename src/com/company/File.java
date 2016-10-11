@@ -46,20 +46,8 @@ public class File {
 	}
 
 	public void printFileInfo(String json, List<String> stream_list) throws FileNotFoundException, UnsupportedEncodingException {
-		// System.out.println(this.fileSize());
-		// System.out.println(this.fileName());
-		// System.out.println(this.fileContents());
-		if (!stream_list.isEmpty() && json != null && json.length() > 0 && json.charAt(json.length() - 1) == '}') {
-			json = json.substring(0, json.length() - 1);
-			for (int index = 0; index < stream_list.size(); index++) {
-				json += "\t\"Stream #" + index + "\"\t:\t\"" + stream_list.get(index) + "\",\n";
-			}
-			json = json.substring(0, json.length() - 2);
-			json += "\n}";
-		}
-		PrintWriter file_writer = new PrintWriter("output.json", "UTF-8");
-		file_writer.println(json);
-		file_writer.close();
-		// System.out.println(json);
+		System.out.println(this.fileSize());
+		System.out.println(this.fileName());
+		System.out.println(this.fileContents());
 	}
 }
