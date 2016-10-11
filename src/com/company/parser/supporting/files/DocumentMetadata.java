@@ -1,5 +1,6 @@
 package com.company.parser.supporting.files;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 
 public class DocumentMetadata {
@@ -91,6 +92,18 @@ public class DocumentMetadata {
         this.title = title;
     }
     
-    
+    public String getJSON() throws IllegalArgumentException, IllegalAccessException {
+    	String json = "{\n";
+    	Field[] elements = this.getClass().getDeclaredFields();
+    	for (Field element : elements) {
+    		if (element == null)
+    			continue;
+    		else
+			json += "\t\"" + element.getName() + "\"\t:\t\"" + element.get(this) + "\",\n";
+    	}
+    	json = json.substring(0, json.length() - 2);
+    	json += "\n}";
+		return json;	
+	}
 }
 
