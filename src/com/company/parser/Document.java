@@ -82,14 +82,14 @@ public class Document extends File {
             }
             streamsJson += "]";
         } catch (Exception e) {
-            System.err.println("Error occurred while serializing");
+            System.err.println("Error occurred while serializing streams data");
         }
 
         try {
             metadataJson = this.getMetadata().getJSON();
         } catch (Exception e) {
             System.err.println(e);
-            System.err.println("Error occurred while serializing");
+            System.err.println("Error occurred while serializing metadata");
         }
 
         if(metadataJson.length() > 0) {
