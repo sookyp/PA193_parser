@@ -4,6 +4,7 @@ import com.company.parser.parsers.PagesParser;
 import com.company.parser.parsers.MetadataParser;
 import com.company.parser.primitives.PDFPage;
 import com.company.parser.supporting.files.DocumentMetadata;
+import com.company.parser.supporting.files.PDFVerification;
 
 import java.io.PrintWriter;
 import java.nio.file.*;
@@ -20,7 +21,14 @@ public class Document extends File {
 
     public Document(Path path) {
         super(path);
-        this.parseDocument();
+        PDFVerification verificate = new PDFVerification(path);
+        if(verificate.verifyPDF()){
+            this.parseDocument();            
+        }
+        else{
+            System.out.println("Given pdf is invalid");
+            System.exit(0);
+        }
     }
 
     public DocumentMetadata getMetadata(){

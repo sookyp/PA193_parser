@@ -29,6 +29,9 @@ static {
     TMP_MAP.put("creatorTool", new String[] {"<xap:CreatorTool>","</xap:CreatorTool>"});
     TMP_MAP.put("title", new String[] {"<dc:title><rdf:Alt><rdf:li xml:lang=\"x-default\">","</rdf:li></rdf:Alt></dc:title>"});
     TMP_MAP.put("creator", new String[] {"<dc:creator><rdf:Seq><rdf:li>","</rdf:li></rdf:Seq></dc:creator>"});
+    TMP_MAP.put("zmodifyDate", new String[] {"<xmp:ModifyDate>","</xmp:ModifyDate>"});
+    TMP_MAP.put("zcreateDate", new String[] {"<xmp:CreateDate>","</xmp:CreateDate>"});
+    TMP_MAP.put("zcreatorTool", new String[] {"<xmp:CreatorTool>","</xmp:CreatorTool>"});  
     METADATA_MAP = Collections.unmodifiableMap(TMP_MAP);
 }    
 
@@ -42,7 +45,8 @@ static {
             
             String metaBegin = "";
             String metaEnd = "";
-            String metaFin = "";      
+            String metaFin = "";    
+            String creatorToolV;
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss-SS:SS");
             Date dateCreated = new Date();
@@ -62,10 +66,35 @@ static {
                 metaParsed.add(metaFin);
             }
 
-            dateCreated = dateFormat.parse(metaParsed.get(0));
-            dateModified = dateFormat.parse(metaParsed.get(4));
+        if(!metaParsed.get(0).isEmpty() || metaParsed.get(7).isEmpty()){
+            if(metaParsed.get(0).isEmpty()){
+                dateCreated = dateFormat.parse(metaParsed.get(7));
+            }
+            else{
+                dateCreated = dateFormat.parse(metaParsed.get(0));
+            }
+        }
+        
+        if(!metaParsed.get(4).isEmpty() || metaParsed.get(8).isEmpty()){
+            if(metaParsed.get(4).isEmpty()){
+                dateCreated = dateFormat.parse(metaParsed.get(8));
+            }
+            else{
+                dateCreated = dateFormat.parse(metaParsed.get(4));
+            }
+        }
+        
+        if(metaParsed.get(2).isEmpty()){
+            creatorToolV = metaParsed.get(9);
+        }
+        else{
+            creatorToolV = metaParsed.get(2);
+        }        
+            
+            //dateCreated = dateFormat.parse(metaParsed.get(0));
+            //dateModified = dateFormat.parse(metaParsed.get(4));
 
-            return new DocumentMetadata(dateCreated, metaParsed.get(1), metaParsed.get(2), metaParsed.get(3), dateModified, metaParsed.get(5), metaParsed.get(6));
+            return new DocumentMetadata(dateCreated, metaParsed.get(1), creatorToolV, metaParsed.get(3), dateModified, metaParsed.get(5), metaParsed.get(6));
         } catch(Exception e){
             return null;
         }
