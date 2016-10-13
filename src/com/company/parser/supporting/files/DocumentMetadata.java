@@ -6,6 +6,7 @@ import java.util.Date;
 public class DocumentMetadata {
 
     int numberOfPages = 0;
+    // names of metadata which we parse
     private Date createDate;
     private String creator;
     private String creatorTool;
@@ -83,6 +84,16 @@ public class DocumentMetadata {
         this.title = title;
     }
 
+    /**
+     * Constructor, saves metadata values in DocumentMetadata attributes
+     * @param createDate
+     * @param creator
+     * @param creatorTool
+     * @param keywords
+     * @param modifyDate
+     * @param producer
+     * @param title 
+     */
     public DocumentMetadata(Date createDate, String creator, String creatorTool, String keywords, Date modifyDate, String producer, String title) {
         this.createDate = createDate;
         this.creator = creator;

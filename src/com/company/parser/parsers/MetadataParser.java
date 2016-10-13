@@ -15,10 +15,16 @@ import java.util.TreeMap;
  * Created by val on 02/10/16.
  */
 public class MetadataParser extends Parser {
-    
+    /**
+     * METADATA_BEGIN, METADATA_END - beginning and ending of metadata block
+     */
     private static final String METADATA_BEGIN = "<?xpacket begin";
     private static final String METADATA_END = "<?xpacket end";
     
+    /**
+     * Map is used for parsing metadata values. Key is name and value is array - beginning and ending
+     * of tag between which is stored value in pdf.
+     */
 private static final Map<String,String[]> METADATA_MAP;
 static {
     Map<String,String[]> TMP_MAP = new TreeMap<>();
@@ -39,6 +45,14 @@ static {
         super(path);
     }
 
+    /**
+     * method takes metadata block and go through this block searching for values from
+     * map (METADATA_MAP - searching for beginning and ending of tag in metadata block). 
+     * When it finds a tag, it parses value, when this tag is not there it store empty string. 
+     * Finally returns new DocumentMetadata whose attributes are metadata values.
+     * @return DocumentMetadata containing metadata values stored in it's attributes 
+     * return null if some exception occured.
+     */
     public DocumentMetadata parseMetadata() {
         try{
             String MetadataBlock = this.parseMetadataFromFile();
@@ -91,15 +105,17 @@ static {
             creatorToolV = metaParsed.get(2);
         }        
             
-            //dateCreated = dateFormat.parse(metaParsed.get(0));
-            //dateModified = dateFormat.parse(metaParsed.get(4));
-
             return new DocumentMetadata(dateCreated, metaParsed.get(1), creatorToolV, metaParsed.get(3), dateModified, metaParsed.get(5), metaParsed.get(6));
         } catch(Exception e){
             return null;
         }
     }
 
+    /**
+     * From given pdf gets block of metadata.
+     * @return String block of metadata (beginning with METADATA_BEGIN, ending with METADATA_END)
+     * @throws IOException 
+     */
     private String parseMetadataFromFile() throws IOException{
         return new FileReader().read(this.getPath(), METADATA_BEGIN, METADATA_END);
     }
