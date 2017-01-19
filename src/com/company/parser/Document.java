@@ -93,7 +93,6 @@ public class Document extends File {
         try {
             metadataJson = this.getMetadata().getJSON();
         } catch (Exception e) {
-            System.err.println(e);
             System.err.println("Error occurred while serializing metadata");
             return false;
         }
