@@ -10,7 +10,9 @@ public class Main {
             if (args.length > 0){
                 Path path = FileSystems.getDefault().getPath(args[0]);    
                 Document document = new Document(path);
-                document.parseDocument();
+                if(!document.parseDocument()) {
+                    System.out.println("An error occured while parsing");
+                }
             }	
 	}        
     }

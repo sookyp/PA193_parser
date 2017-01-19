@@ -28,8 +28,13 @@ public class Document extends File {
     }
 
     public boolean parseDocument(){
-        PDFVerification verificate = new PDFVerification(this.getPath());
-        if(!verificate.verifyPDF()) {
+        try {
+            PDFVerification verificate = new PDFVerification(this.getPath());
+            if(!verificate.verifyPDF()) {
+                System.out.println("Given pdf is invalid");
+                return false;
+            }
+        } catch(Exception e){
             System.out.println("Given pdf is invalid");
             return false;
         }
