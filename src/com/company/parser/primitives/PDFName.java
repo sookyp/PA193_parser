@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
  * Created by val on 02/10/16.
  */
 public class PDFName extends PDFObject {
-	String name;
 	private String value = null;
 
 	public String getValue() {
@@ -19,10 +18,6 @@ public class PDFName extends PDFObject {
 		this.value = value;
 	}
 
-    public String toString() {
-        return name;
-    }
-    
 	@Override
 	public PDFName parse(CharSequence bytes, int offset) throws IOException, InvalidException {
 		if (offset < bytes.length()) {

@@ -3,10 +3,6 @@ package com.company.parser.parsers;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.nio.file.Files;
 
 /**
  * Created by val on 05/10/16.
