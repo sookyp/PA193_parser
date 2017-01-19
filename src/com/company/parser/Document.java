@@ -27,7 +27,6 @@ public class Document extends File {
         }
         else{
             System.out.println("Given pdf is invalid");
-            System.exit(0);
         }
     }
 
