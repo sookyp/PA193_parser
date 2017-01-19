@@ -7,6 +7,7 @@ package com.company.parser.supporting.files;
 
 import com.company.parser.parsers.FileReader;
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,55 +25,53 @@ public class PDFVerification {
     private static final String VERSION = "%PDF-";
     private static final String END = "%%EOF";    
     
-    // content of give file
+    private Path filePath;
     private String fileContent;
-    // prepared content - free of line end
     private String fileContentPrepared;
-    // File made from given Path
     private File file;    
 
-    public String getFileContent() {
+    private String getFileContent() {
         return fileContent;
     }
 
-    public void setFileContent(String fileContent) {
+    private void setFileContent(String fileContent) {
         this.fileContent = fileContent;
     }
 
-    public String getFileContentPrepared() {
+    private String getFileContentPrepared() {
         return fileContentPrepared;
     }
 
-    public void setFileContentPrepared(String fileContentPrepared) {
+    private void setFileContentPrepared(String fileContentPrepared) {
         this.fileContentPrepared = fileContentPrepared;
     }
 
-    public File getFile() {
+    private File getFile() {
         return file;
     }
 
-    public void setFile(File file) {
+    private void setFile(File file) {
         this.file = file;
     }
 
-    /**
-     * Constructor. Reads content of pdf, saves it into fileContent and prepare this content by
-     * deleating ending of rows - this stores into fileContentPrepared. Also creates File from given Path
-     * and stores it into file.
-     */
-     
-    public PDFVerification(Path path) {
-        FileReader fr = new FileReader();
-        this.fileContent = fr.read(path);
-        this.fileContentPrepared = fileContent.replaceAll("(\\r|\\n)", "");;
-        this.file = new File(path.toString());
+    public PDFVerification(Path path) throws IllegalArgumentException {
+        if(Files.isRegularFile(path.toAbsolutePath())) {
+            FileReader fr = new FileReader();
+            this.filePath = path;
+            this.fileContent = fr.read(path);
+            this.fileContentPrepared = fileContent.replaceAll("(\\r|\\n)", "");;
+            this.file = new File(path.toString());
+        } else {
+            throw(new IllegalArgumentException("The path is not a file"));
+        }
     }
     /**
-     * Method calls all submethods for verifying pdf. 
-     * @retun true if it claims that given PDF is valid, false otherwise     * 
+     * Method verifies the pdf file using some heuristics.
+     * @return true if it claims that given PDF is valid, false otherwise 
      */
     public Boolean verifyPDF(){
-        return  this.checkReadableFile() &&
+        return  this.checkExtension() && 
+                this.checkReadableFile() &&
                 this.checkEmptyFile() && 
                 this.checkFileSize() && 
                 this.checkVersion() && 
@@ -81,6 +80,13 @@ public class PDFVerification {
                 this.checkPDFMinimum();
     }    
     
+    /**
+     * Checks if given file is not empty
+     * @return true if file is not empty, false otherwise
+     */
+    public Boolean checkExtension(){
+       return this.filePath.toString().toLowerCase().endsWith(".pdf");
+    }
     /**
      * Checks if given file is not empty
      * @return true if file is not empty, false otherwise

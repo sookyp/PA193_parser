@@ -99,8 +99,7 @@ public class PDFObject {
 				pdf_dictionary.parse(element, 0);
 				return pdf_dictionary;
 			} catch (IOException | InvalidException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                            
 			}
 		} else if (element.startsWith("(") || (element.startsWith("<"))) {
 			// string
@@ -109,8 +108,7 @@ public class PDFObject {
 				pdf_string.parse(element, 0);
 				return pdf_string;
 			} catch (IOException | InvalidException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                            
 			}
 		} else if (element.startsWith("[")) {
 			// array
@@ -119,8 +117,7 @@ public class PDFObject {
 				pdf_array.parseArray(element, 0);
 				return pdf_array;
 			} catch (IOException | InvalidException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                            
 			}
 		} else if (element.startsWith("/")) {
 			// name
@@ -129,8 +126,7 @@ public class PDFObject {
 				pdf_name.parse(element, 0);
 				return pdf_name;
 			} catch (IOException | InvalidException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                            
 			}
 		} else if (element.startsWith("t") || element.startsWith("f") || element.startsWith("T")
 				|| element.startsWith("F")) {
@@ -140,8 +136,7 @@ public class PDFObject {
 				pdf_boolean.parse(element, 0);
 				return pdf_boolean;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                            
 			}
 		} else if (element.startsWith("n") || element.startsWith("N")) {
 			// null
@@ -150,8 +145,7 @@ public class PDFObject {
 				pdf_null.parse(element, 0);
 				return pdf_null;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                            
 			}
 		} else if (Character.isDigit(element.charAt(0)) || element.startsWith("+") || element.startsWith("-")
 				|| element.startsWith(".")) {
@@ -161,8 +155,7 @@ public class PDFObject {
 				pdf_number.parse(element, 0);
 				return pdf_number;
 			} catch (IOException | InvalidException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                            
 			}
 		} else {
 			// ?

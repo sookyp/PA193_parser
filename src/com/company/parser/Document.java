@@ -21,25 +21,29 @@ public class Document extends File {
 
     public Document(Path path) {
         super(path);
-        PDFVerification verificate = new PDFVerification(path);
-        if(verificate.verifyPDF()){
-            this.parseDocument();            
-        }
-        else{
-            System.out.println("Given pdf is invalid");
-            System.exit(0);
-        }
     }
 
     public DocumentMetadata getMetadata(){
         return this.metadata;
     }
 
-    private void parseDocument(){
+    public boolean parseDocument(){
+        try {
+            PDFVerification verificate = new PDFVerification(this.getPath());
+            if(!verificate.verifyPDF()) {
+                System.out.println("Given pdf is invalid");
+                return false;
+            }
+        } catch(Exception e){
+            System.out.println("Given pdf is invalid");
+            return false;
+        }
+        
         try {
             this.parsePages();
         } catch(Exception e){
             System.out.println("An error occured while parsing pages of the pdf");
+            return false;
         }
 
         try {
@@ -47,7 +51,12 @@ public class Document extends File {
             metadata.setNumberOfPages(this.pages.size());
         } catch(Exception e){
             System.out.println("An error occured while parsing metadata");
+            return false;
         }
+        if(!this.writeOutput()){
+            return false;
+        }
+        return true;
     }
 
     private void parsePages() throws Exception{
@@ -58,7 +67,7 @@ public class Document extends File {
         this.metadata = new MetadataParser(this.getPath()).parseMetadata();
     }
 
-    public void serializeToFile(){
+    private boolean writeOutput(){
         String json = null;
 
         String streamsJson = "";
@@ -83,32 +92,41 @@ public class Document extends File {
             streamsJson += "]";
         } catch (Exception e) {
             System.err.println("Error occurred while serializing streams data");
+            return false;
         }
 
         try {
             metadataJson = this.getMetadata().getJSON();
-        } catch (Exception e) {
-            System.err.println(e);
+        } catch (IllegalAccessException | IllegalArgumentException e) {
             System.err.println("Error occurred while serializing metadata");
+            return false;
         }
 
+        String contents = "";
+        
         if(metadataJson.length() > 0) {
-            this.writeFile("{\"metadata\":" + metadataJson + ",\"streams\":" + streamsJson + "}");
+            contents = "{\"metadata\":" + metadataJson + ",\"streams\":" + streamsJson + "}";
         } else {
-            this.writeFile("{\"streams\":" + streamsJson + "}");
+            contents = "{\"streams\":" + streamsJson + "}";
         }
-
+        
+        if(!this.writeFile(contents)) {
+            return false;
+        }
+        return true;
     }
 
-    private void writeFile(String contents){
+    private boolean writeFile(String contents){
         try {
             String fileName = "output.json";
             PrintWriter file_writer = new PrintWriter(fileName, "UTF-8");
             file_writer.println(contents);
             file_writer.close();
             System.err.println("Successfully written to " + fileName);
+            return true;
         } catch(Exception e){
             System.err.println("Error occurred while writing the output");
+            return false;
         }
     }
 }

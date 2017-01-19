@@ -1,7 +1,6 @@
 package com.company.parser.parsers;
 
 import com.company.parser.primitives.PDFDictionary;
-import com.company.parser.primitives.PDFObject;
 
 import java.io.IOException;
 import java.nio.file.Path;
