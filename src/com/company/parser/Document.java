@@ -57,7 +57,7 @@ public class Document extends File {
         this.metadata = new MetadataParser(this.getPath()).parseMetadata();
     }
 
-    public void serializeToFile(){
+    public void writeOutput(){
         String json = null;
 
         String streamsJson = "";

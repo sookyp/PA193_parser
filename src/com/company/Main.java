@@ -19,7 +19,7 @@ public class Main {
             if (args.length > 0){
                 Path path = FileSystems.getDefault().getPath(args[0]);    
                 Document document = new Document(path);
-                document.serializeToFile();
+                document.writeOutput();
             }	
 	}
         
