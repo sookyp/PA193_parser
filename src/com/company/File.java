@@ -50,12 +50,4 @@ public class File {
 		System.out.println(this.fileName());
 		System.out.println(this.fileContents());
 	}
-
-    boolean isDirectory() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    File[] listFiles() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
